@@ -71,7 +71,7 @@ function List() {
           Prev
         </button>
         <div>Page: {page}</div>
-        <button onClick={() => setPage((p) => p + 1)} disabled={!hasNext}>
+        <button onClick={() => setPage((p) => p + 1)} disabled={!hasNext || isFetching}>
           Next
         </button>
       </div>
