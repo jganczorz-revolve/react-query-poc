@@ -4,7 +4,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 
 function List() {
   const [page, setPage] = useState(1);
-  const [hasNext, setHasNext] = useState(false);
   const location = useLocation();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
@@ -22,11 +21,7 @@ function List() {
       throw new Error("Network response was not ok");
     }
 
-    const json = await response.json();
-
-    setHasNext(!!json.next);
-
-    return Promise.resolve(json.results);
+    return response.json();
   };
 
   const { data, error, isFetching } = useQuery(
@@ -44,7 +39,7 @@ function List() {
   }
   return (
     <div>
-      {data.map((r, index) => {
+      {data?.results?.map((r, index) => {
         const link =
           location.pathname +
           "/" +
@@ -71,7 +66,7 @@ function List() {
           Prev
         </button>
         <div>Page: {page}</div>
-        <button onClick={() => setPage((p) => p + 1)} disabled={!hasNext || isFetching}>
+        <button onClick={() => setPage((p) => p + 1)} disabled={!data.next || isFetching}>
           Next
         </button>
       </div>
