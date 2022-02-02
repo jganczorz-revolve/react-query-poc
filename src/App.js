@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { QueryClient, QueryClientProvider } from "react-query";
+import { Routes, Route } from "react-router-dom";
+import "./App.css";
+import Details from "./components/Details";
+import List from "./components/List";
+import { pages } from "./pages/enums";
+import Home from "./pages/Home";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Routes>
+        <Route path="/" element={<Home />} key={"index_-1"} />
+        {pages.map((pg, index) => (
+          <Route path={pg.to} key={`index_${index}`}>
+            <Route path={":id"} element={<Details />} key={`index__detail_${index}`}/>
+            <Route element={<List />} index key={`index_list_${index}`} />
+          </Route>
+        ))}
+      </Routes>
+    </QueryClientProvider>
   );
 }
 
