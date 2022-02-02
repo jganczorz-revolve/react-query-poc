@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -30,9 +30,19 @@ function List() {
     {
       placeholderData: [],
       keepPreviousData: true,
-      staleTime: 60 * 1000
+      staleTime: 60 * 1000,
     }
   );
+
+  useEffect(() => {
+    if (data?.next) {
+      queryClient.prefetchQuery(
+        [location.pathname || "", { page: page + 1 }],
+        getResult,
+        { staleTime: 60 * 1000 }
+      );
+    }
+  }, [data, page, queryClient]);
 
   if (error) {
     return <div>{error.message}</div>;
@@ -61,16 +71,21 @@ function List() {
           </div>
         );
       })}
-      <div style={{display: "flex"}}>
+      <div style={{ display: "flex" }}>
         <button onClick={() => setPage((p) => p - 1)} disabled={page === 1}>
           Prev
         </button>
         <div>Page: {page}</div>
-        <button onClick={() => setPage((p) => p + 1)} disabled={!data.next || isFetching}>
+        <button
+          onClick={() => setPage((p) => p + 1)}
+          disabled={!data.next || isFetching}
+        >
           Next
         </button>
       </div>
-      <div><button onClick={() => navigate(-1)}>Go Back</button></div>
+      <div>
+        <button onClick={() => navigate(-1)}>Go Back</button>
+      </div>
     </div>
   );
 }
