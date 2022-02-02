@@ -31,10 +31,11 @@ function Details() {
   };
 
   const { data, error } = useQuery(
-    [location.pathname, urlParams.id],
+    [location.pathname],
     getResult,
     {
       placeholderData: {},
+      staleTime: 30 * 1000
     }
   );
 

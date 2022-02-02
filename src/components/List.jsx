@@ -63,7 +63,7 @@ function List() {
             <Link
               to={link}
               onClick={() => {
-                queryClient.setQueryData(link, r);
+                queryClient.setQueryData([link], r);
               }}
             >
               {r.name || r.title}
