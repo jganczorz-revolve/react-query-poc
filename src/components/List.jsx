@@ -35,6 +35,7 @@ function List() {
     {
       placeholderData: [],
       keepPreviousData: true,
+      staleTime: 60
     }
   );
 
